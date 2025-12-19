@@ -10,8 +10,11 @@ import java.util.stream.Collectors;
 public class CountryService {
 
     private static final String BASE_URL = "https://restcountries.com";
+
     private final WebClient webClient;
 
+
+    //Här kopplar vi upp oss till webbklienten
     public CountryService() {
         this.webClient = WebClient.builder()
                 .baseUrl(BASE_URL)
@@ -20,6 +23,7 @@ public class CountryService {
 
     public List<Country> getAllCountryNames() {
 
+        //URI är att vi säger att vi lägger till det på slutet av vår URL som ett sätt att säga till koden var vi vill hämta data
         var response = webClient.get()
                 .uri("/v3.1/all?fields=name")
                 .retrieve()
@@ -35,6 +39,7 @@ public class CountryService {
                 .collect(Collectors.toList());
     }
 
+    //Här måste man lägga in en sträng på det landet man vill hämta info ifrån t.ex. Sweden, Latvia, Germany
     public Country getCountryByName(String requestedName) {
 
         var response = webClient.get()
@@ -48,6 +53,7 @@ public class CountryService {
 
         Country country = new Country();
 
+        //Här mappas upp all data i JSON svaret
         var name = (Map) data.get("name");
         country.setCommonName((String) name.get("common"));
         country.setOfficialName((String) name.get("official"));
